@@ -7,6 +7,6 @@ if the above doesn't work try
 
 settings -> Build, Execution, Deployment -> Compiler -> Annotation Processors 
 
-click on current project then select "Obtain processors from class path"
+click on current project then select "Obtain processors from class path". Refer below screen shot for clear understanding.
 
 ![image](https://github.com/user-attachments/assets/fd30bced-0f2d-470e-8bcc-9d8eb4736c43)
