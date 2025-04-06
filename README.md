@@ -1,4 +1,6 @@
 How to resolve lombok not working error in intellij ?
+
+
 settings -> Build, Execution, Deployment -> Compiler -> Annotation Processors -> select "Obtain processors from class path"
 if the above doesn't work try
 settings -> Build, Execution, Deployment -> Compiler -> Annotation Processors 
