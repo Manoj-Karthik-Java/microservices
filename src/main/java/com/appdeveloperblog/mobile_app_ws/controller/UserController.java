@@ -1,15 +1,17 @@
 package com.appdeveloperblog.mobile_app_ws.controller;
 
+import com.appdeveloperblog.mobile_app_ws.exceptions.UserServiceException;
 import com.appdeveloperblog.mobile_app_ws.model.request.UpdateUserDetailsRequestModel;
 import com.appdeveloperblog.mobile_app_ws.model.request.UserDetailsRequestModel;
 import com.appdeveloperblog.mobile_app_ws.model.response.UserRest;
+import com.appdeveloperblog.mobile_app_ws.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -18,14 +20,19 @@ import java.util.UUID;
 @RequestMapping("/users")
 public class UserController {
     Map<String, UserRest> users;
+    @Autowired
+    UserService userService;
+
     //    Below annotation can also be written as @GetMapping("/{userId}")
     //    produces property is used to produce return data in xml format
     @GetMapping(
             path = "/{userId}",
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
     )
-    public ResponseEntity<UserRest> getUser(@PathVariable String userId) {
-        System.out.println(users.get(userId));
+    public ResponseEntity<UserRest> getUser(@PathVariable String userId){
+
+        if(true) throw new UserServiceException("A user service exception is thrown");
+
         if (users.containsKey(userId))
             return new ResponseEntity<UserRest>(users.get(userId), HttpStatus.OK);
         else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -61,19 +68,11 @@ public class UserController {
     )
     public ResponseEntity<UserRest> createUser(@Valid @RequestBody UserDetailsRequestModel userDetailsRequestModel) {
 
-        UserRest userRest = new UserRest();
-        userRest.setEmail(userDetailsRequestModel.getEmail());
-        userRest.setFirstName(userDetailsRequestModel.getFirstName());
-        userRest.setLastName(userDetailsRequestModel.getLastName());
-
-        String key = UUID.randomUUID().toString();
-        userRest.setId(key);
-        if (users == null) users = new HashMap<>();
-        users.put(key, userRest);
-
-        return new ResponseEntity<UserRest>(users.get(key), HttpStatus.OK);
+        UserRest userRest = userService.createUser(userDetailsRequestModel);
+        return new ResponseEntity<UserRest>(userRest, HttpStatus.OK);
 
     }
+
     @PutMapping(
             path = "/{userId}",
             produces = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE},
